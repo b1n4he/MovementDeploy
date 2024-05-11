@@ -1,0 +1,10 @@
+{
+  "transactions": [
+    {
+      "rpc": "https://mevm.devnet.m1.movementlabs.xyz"
+    },
+    {
+      "rpc": "https://mevm.devnet.m1.movementlabs.xyz"
+    }
+  ]
+}
