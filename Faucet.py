@@ -3,12 +3,31 @@ import urllib3
 from web3 import Web3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# 此处修改代理
+import requests
+import time
+
+MAX_PROXY_CHECK_ATTEMPTS = 5
+SLEEP_TIME = 60
+
+def check_proxy(proxy):
+    for i in range(MAX_PROXY_CHECK_ATTEMPTS):
+        try:
+            response = requests.get('https://myip.ipip.net', proxies=proxy, timeout=5)
+            print('验证成功, IP信息: ', response.text)
+            return True
+        except Exception as e:
+            print('代理失效，等待1分钟后重新验证')
+            time.sleep(SLEEP_TIME)
+    print('代理验证失败，无法继续执行任务')
+    return False
+
+# 修改代理
 PROXY = {
-    'http': 'http://1gXXXXXXX7m:n6XXXXXXXX7Qh@proxy.proxy-cheap.com:31112',
-    'https': 'http://1gXXXXXXX7m:n6XXXXXXXX7Qh@proxy.proxy-cheap.com:31112',
+    'http': 'http://7182*****a:ce65b53e-global@*******:1000',
+    'https': 'http://7182*****a:ce65b53e-global@*******:1000',
 }
 
+proxy_status = check_proxy(PROXY)
 
 def getTestToken(address):
     headers = {
@@ -43,6 +62,9 @@ def getTestToken(address):
                                      timeout=5)
             print('[{}] {}尝试领水中...'.format(i,address))
             print(response.json())
+        except KeyboardInterrupt:
+            print("Interrupted by user")
+            break
         except:
             pass
 
@@ -75,7 +97,3 @@ for i in address:
 with open('balances.txt', 'w') as f:
     for address, amount in balance.items():
         f.write(f"{address}\t{amount}\n")
-
-
-
-
